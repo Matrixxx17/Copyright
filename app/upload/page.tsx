@@ -1,19 +1,34 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { onAuthStateChanged, getAuth } from "firebase/auth"
+import { app } from "@/lib/firebase" // <-- adjust this to your Firebase config
 import { Button } from "@/components/ui/button"
 import { Upload, FileVideo } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 export default function UploadPage() {
+  const auth = getAuth(app)
   const router = useRouter()
+  const [userInitial, setUserInitial] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const initial = user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"
+        setUserInitial(initial)
+      } else {
+        router.push("/login")
+      }
+    })
+
+    return () => unsubscribe()
+  }, [auth, router])
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -27,17 +42,13 @@ export default function UploadPage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const droppedFile = e.dataTransfer.files[0]
-      if (droppedFile.type.startsWith("video/")) {
-        setFile(droppedFile)
-      }
+    if (e.dataTransfer.files?.[0]?.type.startsWith("video/")) {
+      setFile(e.dataTransfer.files[0])
     }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files?.[0]) {
       setFile(e.target.files[0])
     }
   }
@@ -54,6 +65,10 @@ export default function UploadPage() {
       }, 1000)
     }
   }
+  const handleLogout = () => {
+    localStorage.removeItem("token") // Adjust this if using other storage/session method
+    router.push("/")
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -66,21 +81,18 @@ export default function UploadPage() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="#" className="text-sm hover:text-pink-400 transition-colors">
-            Dashboard
-          </Link>
-          <Link href="#" className="text-sm hover:text-pink-400 transition-colors">
-            History
-          </Link>
-          <Link href="/pricing" className="text-sm hover:text-pink-400 transition-colors">
-            Pricing
-          </Link>
+          <Link href="#" className="text-sm hover:text-pink-400 transition-colors">Dashboard</Link>
+          <Link href="#" className="text-sm hover:text-pink-400 transition-colors">History</Link>
+          <Link href="/pricing" className="text-sm hover:text-pink-400 transition-colors">Pricing</Link>
         </nav>
 
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium">U</span>
+            <span className="text-sm font-medium">{userInitial ?? "U"}</span>
           </div>
+          <Button variant="ghost" onClick={handleLogout} className="text-sm text-gray-400 hover:text-pink-400">
+            Logout
+          </Button>
         </div>
       </header>
 
@@ -113,9 +125,9 @@ export default function UploadPage() {
                   <FileVideo className="h-8 w-8 text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-lg font-medium mb-1">{file?.name}</p>
+                  <p className="text-lg font-medium mb-1">{file.name}</p>
                   <p className="text-sm text-gray-400">
-                    {(file?.size / (1024 * 1024)).toFixed(2)} MB
+                    {(file.size / (1024 * 1024)).toFixed(2)} MB
                   </p>
                 </div>
               </div>
