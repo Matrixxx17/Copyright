@@ -5,7 +5,6 @@ This Chrome Extension helps content creators (e.g., YouTubers, OTT platforms lik
 Built using Google Cloud services like Vertex AI, Google Cloud Functions, and Google Video Intelligence, and developed using Google IDX for rapid iteration.
 
 ---
-
 ## 🚀 Features
 
 - 🔍 Automated detection of copyrighted audio, video, and textual content
@@ -86,6 +85,18 @@ Built using Google Cloud services like Vertex AI, Google Cloud Functions, and Go
   - Geo & time restrictions
 - Admin login to upload new contract rules (enterprise mode)
 
+---
+## Steps to run project.
+
+1. Press the **Fork** button (top right the page) to save copy of this project on your account.
+2. Download the repository files (project) from the download section or clone this project by typing in the bash the following command:
+
+       git clone https://github.com/KARLE-ATHARVA/LictrAI.git
+3. Run the following commands in the terminal.
+
+       npm install --legacy peer
+       npm run build
+       npm run start
 ---
 
 ## 🤝 Team
