@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { onAuthStateChanged, getAuth } from "firebase/auth"
-import { app } from "@/lib/firebase" // <-- adjust this to your Firebase config
+import { app } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Upload, FileVideo } from "lucide-react"
 
@@ -15,6 +15,7 @@ export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -32,25 +33,53 @@ export default function UploadPage() {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(true)
   }
 
-  const handleDragLeave = () => {
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsDragging(false)
   }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(false)
-    if (e.dataTransfer.files?.[0]?.type.startsWith("video/")) {
-      setFile(e.dataTransfer.files[0])
+    const droppedFile = e.dataTransfer.files?.[0]
+
+    if (droppedFile) {
+      validateAndSetFile(droppedFile)
     }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setFile(e.target.files[0])
+    const selectedFile = e.target.files?.[0]
+    if (selectedFile) {
+      validateAndSetFile(selectedFile)
     }
+  }
+
+  const validateAndSetFile = (selectedFile: File) => {
+    const MAX_SIZE_MB = 500
+    const isVideo = selectedFile.type.startsWith("video/")
+    const fileSizeMB = selectedFile.size / (1024 * 1024)
+
+    if (!isVideo) {
+      setError("Please upload a valid video file (MP4, MOV, AVI, WMV).")
+      setFile(null)
+      return
+    }
+
+    if (fileSizeMB > MAX_SIZE_MB) {
+      setError("File size exceeds 500MB limit.")
+      setFile(null)
+      return
+    }
+
+    setFile(selectedFile)
+    setError(null)
   }
 
   const handleUploadClick = () => {
@@ -65,13 +94,15 @@ export default function UploadPage() {
       }, 1000)
     }
   }
+
   const handleLogout = () => {
-    localStorage.removeItem("token") // Adjust this if using other storage/session method
+    localStorage.removeItem("token")
     router.push("/")
   }
 
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Header */}
       <header className="container mx-auto py-4 px-4 flex justify-between items-center border-b border-gray-800">
         <Link href="/">
           <div className="flex items-center gap-2">
@@ -96,16 +127,17 @@ export default function UploadPage() {
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="container mx-auto py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-center">Upload Your Video</h1>
 
           <div
-            className={`border-2 border-dashed rounded-xl p-12 text-center ${
+            className={`border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
               isDragging
                 ? "border-purple-500 bg-purple-500/10"
                 : "border-gray-700 hover:border-purple-500/50 hover:bg-gray-900/50"
-            } transition-all cursor-pointer`}
+            }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -126,9 +158,7 @@ export default function UploadPage() {
                 </div>
                 <div>
                   <p className="text-lg font-medium mb-1">{file.name}</p>
-                  <p className="text-sm text-gray-400">
-                    {(file.size / (1024 * 1024)).toFixed(2)} MB
-                  </p>
+                  <p className="text-sm text-gray-400">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                 </div>
               </div>
             ) : (
@@ -140,14 +170,15 @@ export default function UploadPage() {
                   <p className="text-lg font-medium mb-1">Drag and drop your video here</p>
                   <p className="text-sm text-gray-400">or click to browse your files</p>
                 </div>
-                <div className="text-xs text-gray-500">
-                  Supported formats: MP4, MOV, AVI, WMV (Max 500MB)
-                </div>
+                <div className="text-xs text-gray-500">Supported formats: MP4, MOV, AVI, WMV (Max 500MB)</div>
               </div>
             )}
           </div>
 
-          {file && (
+          {/* Error display */}
+          {error && <p className="mt-4 text-red-500 text-sm text-center">{error}</p>}
+
+          {file && !error && (
             <div className="mt-8 text-center">
               <Button
                 onClick={handleSubmit}
@@ -190,6 +221,7 @@ export default function UploadPage() {
         </div>
       </main>
 
+      {/* Footer */}
       <footer className="border-t border-gray-800 py-6 mt-16">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
