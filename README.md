@@ -25,27 +25,27 @@ Built using Google Cloud services like Vertex AI, Google Cloud Functions, and Go
 
 ### 🧠 AI & ML (Vertex AI + Google Services)
 
-| Component                     | Tool / API                                                                 |
+| Component                     | Tool / API                                                                |
 |------------------------------|----------------------------------------------------------------------------|
-| Audio Fingerprinting          | Vertex AI Custom Model / Audd.io (optional fallback)                      |
+| Audio Fingerprinting          | Vertex AI Custom Model                                                    |
 | Speech-to-Text                | Google Speech-to-Text API                                                 |
 | On-Screen Text Extraction     | Tesseract.js (OCR)                                                        |
-| Text Plagiarism Detection     | PlagiarismCheck.org API (or free LLM-based semantic check via Vertex AI) |
+| Text Plagiarism Detection     | PlagiarismCheck.org API (or free LLM-based semantic check via Vertex AI)  |
 | Scene Detection               | Google Cloud Video Intelligence API                                       |
-| Contract Analysis (NLP)       | Vertex AI PaLM 2 / Gemini Model + Cloud Document AI (optional)           |
+| Contract Analysis (NLP)       | Vertex AI PaLM 2 / Gemini Model + Cloud Document AI (optional)            |
 
 ### ⚙️ Backend & Infra
 
 | Component                     | Service                                                                  |
-|------------------------------|--------------------------------------------------------------------------|
-| ML Inference / Trigger        | Google Cloud Functions (No billing if within free tier)                  |
-| Content Matching DB           | Firebase Realtime DB or Firestore (Free Tier)                            |
-| Authentication (if needed)    | Firebase Auth                                                            |
-| Dashboard / Analytics         | React + Firebase + Chart.js / Recharts                                   |
+|------------------------------|---------------------------------------------------------------------------|
+| ML Inference / Trigger        | Google Cloud Functions                                                   |
+| Content Matching DB           | Firebase Realtime DB                                                     |
+| Authentication                | Firebase Auth                                                            |
+| Dashboard / Analytics         | Next.JS + Firebase + Chart.js                                            |
 
 ### 🧪 Development Environment
 
-- Google IDX — Dev environment for building extension backend (Node.js / Python) and deploying ML services
+- Google IDX — Dev environment for building extension backend (Python) and deploying ML services
 - Vertex AI Studio — Model training, prediction, and fine-tuning
 - GitHub — Version control & CI/CD
 
@@ -90,11 +90,24 @@ Built using Google Cloud services like Vertex AI, Google Cloud Functions, and Go
 
 ## 🤝 Team
 
-| Name         | Role                         |
-|--------------|------------------------------|
-| Your Name    | Full Stack / AI Developer    |
-| Teammate 1   | UI/UX Designer               |
-| Teammate 2   | Cloud & Infra Specialist     |
-| Teammate 3   | API Integrator / QA Tester   |
+| PopCats             |
+|---------------------|
+| Purvi Passi         |
+| Aleph Lakra         |
+| Rohan Suryavanshi   |
+| Atharva Karle       |
 
 ---
+
+## 💡 Inspiration
+
+Built for the **Aha + Google Hackathon** to solve real-world challenges in content licensing and digital rights management using **AI** and **Google’s ecosystem**.
+
+---
+
+## 🛠️ Future Enhancements
+
+- 🎯 Real-time watermark tracking in videos  
+- 🤖 Generative AI module to suggest alternatives  
+- 🔗 Blockchain-based licensing ledger (for provenance)  
+- 📩 Gmail/GDrive licensing integration  
