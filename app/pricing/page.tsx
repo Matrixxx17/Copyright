@@ -10,7 +10,11 @@ export default function PricingPage() {
           <Link href="/">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full"></div>
+<<<<<<< HEAD
               <span className="font-bold text-xl">LICTR-AI</span>
+=======
+              <span className="font-bold text-xl">CopyrightAI</span>
+>>>>>>> e12af28f4a1023182be9e3e49db9e1316ee1f307
             </div>
           </Link>
         </div>
@@ -240,9 +244,15 @@ export default function PricingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <div className="w-6 h-6 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full"></div>
+<<<<<<< HEAD
               <span className="font-bold">LICTR-AI</span>
             </div>
             <div className="text-sm text-gray-500">© {new Date().getFullYear()} LICTR-AI. All rights reserved.</div>
+=======
+              <span className="font-bold">CopyrightAI</span>
+            </div>
+            <div className="text-sm text-gray-500">© {new Date().getFullYear()} CopyrightAI. All rights reserved.</div>
+>>>>>>> e12af28f4a1023182be9e3e49db9e1316ee1f307
           </div>
         </div>
       </footer>
