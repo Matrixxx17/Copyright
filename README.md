@@ -1,4 +1,4 @@
-# 🎬 Lictr - The AI-Powered Copyright & Licensing Compliance Assistant for Content Creators
+# 🎬 LictrAI - The AI-Powered Copyright & Licensing Compliance Assistant for Content Creators
 
 This Chrome Extension helps content creators (e.g., YouTubers, OTT platforms like Aha) detect copyright risks in their videos before publishing. It uses AI to analyze audio, video, and text from uploaded content, ensuring licensing compliance and reducing legal risks.
 
